@@ -115,41 +115,51 @@ struct CanvasView: View {
         simulatedPoints = []
         currentPointIndex = 0
 
-        animationTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { timer in
+        // Schedule a timer that fires repeatedly
+        // *** INCREASED timeInterval to slow down animation by 25% ***
+        animationTimer = Timer.scheduledTimer(withTimeInterval: 0.0375, repeats: true) { timer in // WAS 0.03
+            // Check if we have reached the end of the predefined path
             guard currentPointIndex < simulatedPath.count else {
                 stopAnimation()
                 return
             }
+            // Add the next point from the path to the array that gets drawn
             simulatedPoints.append(simulatedPath[currentPointIndex])
+            // Move to the next point index for the next timer fire
             currentPointIndex += 1
         }
     }
-
     /// Stops the animation timer and releases it.
     private func stopAnimation() {
         animationTimer?.invalidate()
         animationTimer = nil
     }
 
-    /// Generates a pre-defined array of points for the simulated animation path.
+    /// Generates a pre-defined array of points for the simulated animation path (Heart Shape).
     /// - Returns: An array of `CGPoint` representing the path.
     static func generateSimulatedPath() -> [CGPoint] {
         var points: [CGPoint] = []
-        let amplitude: CGFloat = 50.0
-        let frequency: CGFloat = 0.02
-        // Adjust Y offset based on visual testing in the target device/simulator
-        let yOffset: CGFloat = UIScreen.main.bounds.height / 2.0 + 50 // Example: Center Y + offset
-        let startX: CGFloat = 50.0
-        let endX: CGFloat = UIScreen.main.bounds.width - 50.0
-        let step: CGFloat = 5.0
 
-        for x in stride(from: startX, through: endX, by: step) {
-            let y = sin(x * frequency) * amplitude + yOffset
+        // --- Heart Shape Parameters ---
+        let totalPoints = 100
+        // Introduce separate X and Y scaling factors to control aspect ratio
+        let scaleY: CGFloat = 15.0 // Keep vertical scale similar to before
+        let scaleX: CGFloat = 11.0 // *** REDUCED X scale to make it narrower ***
+        let centerX: CGFloat = UIScreen.main.bounds.width / 2.0
+        let centerY: CGFloat = UIScreen.main.bounds.height / 2.0 - 50
+
+        // Loop through angles
+        for i in 0...totalPoints {
+            let angle = 2 * .pi * CGFloat(i) / CGFloat(totalPoints)
+
+            // Parametric equations using separate X and Y scaling
+            let x = centerX + scaleX * (16 * pow(sin(angle), 3)) // Use scaleX
+            let y = centerY - scaleY * (13 * cos(angle) - 5 * cos(2 * angle) - 2 * cos(3 * angle) - cos(4 * angle)) // Use scaleY
+
             points.append(CGPoint(x: x, y: y))
         }
         return points
     }
-
 } // ****** End of CanvasView struct ******
 
 
