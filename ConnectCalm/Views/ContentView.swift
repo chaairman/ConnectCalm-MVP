@@ -5,57 +5,89 @@ import SwiftUI
 enum AppState {
     case roleSelection // Initial screen with two choices
     case seekerLoading // Simulating connection for seeker
-    case seekerCanvas  // Displaying canvas for seeker (will show simulated trace later)
+    case seekerCanvas  // Displaying canvas for seeker (shows simulated trace)
     case supporterLoading // Simulating finding someone for supporter
-    case supporterCanvas // Displaying interactive canvas for supporter (will allow drawing later)
+    case supporterCanvas // Displaying interactive canvas for supporter (allows drawing)
 }
 
 // MARK: - Content View
+/// The main container view that manages the overall application state and transitions between primary views.
 struct ContentView: View {
-    // State variable to track the current app flow
+    // State variable to track and control the current visible view/flow
     @State private var currentState: AppState = .roleSelection
 
     var body: some View {
-        // Use a switch statement to show the correct view based on the current state
-        // Add a subtle animation for transitions
-        VStack { // Use VStack to contain the switch for transitions
+        // Use a VStack to manage layout and apply animations globally
+        VStack {
+            // Switch statement determines which view is currently displayed
             switch currentState {
+
             case .roleSelection:
+                // Show the initial role selection screen
                 RoleSelectionView(
-                    onSeekSupport: { currentState = .seekerLoading }, // Change state
-                    onOfferSupport: { currentState = .supporterLoading } // Change state
+                    // Action for the "Seek Support" button
+                    onSeekSupport: { currentState = .seekerLoading }, // Transition to seeker loading state
+                    // Action for the "Offer Support" button
+                    onOfferSupport: { currentState = .supporterLoading } // Transition to supporter loading state
                 )
-                // Prevent default NavigationView transition, manage via state
-                .transition(.opacity) // Fade transition
+                .transition(.opacity) // Use a fade transition for this view
 
             case .seekerLoading:
+                // Show the loading view with the appropriate message for the seeker
                 LoadingView(message: "Connecting...")
-                    .onAppear {
-                        // IMMEDIATE transition for Phase 1 testing - We'll add delay in Phase 4
-                         currentState = .seekerCanvas
-                    }
-                    .transition(.opacity) // Fade transition
+                    // Note: The .onChange block below handles the transition out of this state for now
+                    .transition(.opacity)
 
             case .seekerCanvas:
-                CanvasView(onEndSession: { currentState = .roleSelection }) // Change state back
-                    .transition(.opacity) // Fade transition
+                // Show the canvas view configured for the seeker (receiving mode)
+                CanvasView(
+                    mode: .receiving, // <-- Pass .receiving mode here
+                    onEndSession: { currentState = .roleSelection } // Action for its "End Session" button
+                )
+                .transition(.opacity)
 
             case .supporterLoading:
-                 LoadingView(message: "Looking for someone...")
-                     .onAppear {
-                         // IMMEDIATE transition for Phase 1 testing - We'll add delay in Phase 4
-                         currentState = .supporterCanvas
-                     }
-                    .transition(.opacity) // Fade transition
+                // Show the loading view with the appropriate message for the supporter
+                LoadingView(message: "Looking for someone...")
+                    // Note: The .onChange block below handles the transition out of this state for now
+                    .transition(.opacity)
 
             case .supporterCanvas:
-                CanvasView(onEndSession: { currentState = .roleSelection }) // Change state back
-                    .transition(.opacity) // Fade transition
+                 // Show the canvas view configured for the supporter (guiding mode)
+                 CanvasView(
+                    mode: .guiding, // <-- Pass .guiding mode here
+                    onEndSession: { currentState = .roleSelection } // Action for its "End Session" button
+                 )
+                 .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: currentState) // Animate changes based on state
-    }
-}
+        // Apply a default animation to transitions triggered by changes in `currentState`
+        .animation(.easeInOut(duration: 0.3), value: currentState)
+
+        // --- Temporary State Transition Logic (for Phase 1-3 Testing) ---
+        // This .onChange handles the automatic transition from Loading -> Canvas
+        // We will replace this with proper timed delays in Phase 4.
+        .onChange(of: currentState) { newState in
+             if newState == .seekerLoading {
+                 // If we just entered seeker loading, schedule a quick jump to the canvas
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                     // Double-check state hasn't changed again (e.g., user navigated back)
+                     if currentState == .seekerLoading {
+                         currentState = .seekerCanvas
+                     }
+                 }
+             } else if newState == .supporterLoading {
+                // If we just entered supporter loading, schedule a quick jump to the canvas
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    // Double-check state
+                     if currentState == .supporterLoading {
+                        currentState = .supporterCanvas
+                     }
+                 }
+             }
+        }
+    } // End of body
+} // End of ContentView struct
 
 // MARK: - Preview
 #Preview {
