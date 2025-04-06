@@ -1,19 +1,22 @@
 import SwiftUI
 
-// MARK: - Loading View (Placeholder)
-// Displays a simple message while simulating network activity.
+// MARK: - Loading View
+// Displays a message and activity indicator while simulating network activity.
 struct LoadingView: View {
     let message: String // Message to display (e.g., "Connecting...", "Searching...")
 
     var body: some View {
-        VStack {
+        VStack(spacing: 20) { // Add some spacing
+            ProgressView() // Indeterminate progress indicator
+                .scaleEffect(1.5) // Make it a bit larger
+
             Text(message)
-                .font(.title2)
-                .foregroundColor(.secondary) // Use a less prominent color
-            // We'll add a ProgressView or custom animation later (Phase 4/5)
+                .font(.title3) // Slightly smaller font than before maybe
+                .foregroundColor(.secondary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity) // Center it
-        .background(Color(.systemBackground)) // Use system background for now
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGray6)) // Use a soft background consistent with others
+        .navigationBarHidden(true) // Ensure nav bar stays hidden if pushed
     }
 }
 
