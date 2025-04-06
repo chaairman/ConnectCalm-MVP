@@ -14,6 +14,7 @@
 		31AE51BC2DA2235800A6975A /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AE51BB2DA2235800A6975A /* LoadingView.swift */; };
 		31AE51BE2DA2237600A6975A /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AE51BD2DA2237600A6975A /* CanvasView.swift */; };
 		31AE51C02DA2239200A6975A /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AE51BF2DA2239200A6975A /* RoleSelectionView.swift */; };
+		31AE51C22DA22A6F00A6975A /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AE51C12DA22A6F00A6975A /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		31AE51BB2DA2235800A6975A /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		31AE51BD2DA2237600A6975A /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 		31AE51BF2DA2239200A6975A /* RoleSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleSelectionView.swift; sourceTree = "<group>"; };
+		31AE51C12DA22A6F00A6975A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 		31AE51B92DA21A7100A6975A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				31AE51C12DA22A6F00A6975A /* Theme.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				31AE51AD2DA2175D00A6975A /* ContentView.swift in Sources */,
 				31AE51C02DA2239200A6975A /* RoleSelectionView.swift in Sources */,
 				31AE51AB2DA2175D00A6975A /* ConnectCalmApp.swift in Sources */,
+				31AE51C22DA22A6F00A6975A /* Theme.swift in Sources */,
 				31AE51BE2DA2237600A6975A /* CanvasView.swift in Sources */,
 				31AE51BC2DA2235800A6975A /* LoadingView.swift in Sources */,
 			);
